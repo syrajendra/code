@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="webapis_wsdl"   
+	xmlns:tns="http://servre_name/apt/test/blog_webservice/sample.wsdl"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	targetNamespace="http://server_name/apt/test/blog_webservice/sample.wsdl" 
+	xmlns="http://server_name/apt/test/blog_webservice/sample.wsdl">
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://server_name/apt/test/blog_webservice/sample.wsdl">
+			<xsd:complexType name="key_value_data">
+				<xsd:sequence>
+					<xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="name" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="data" type="xsd:string"/>
+				</xsd:sequence>			  	
+			</xsd:complexType>
+			
+			<xsd:element name="array_of_key_value_data">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="unbounded" name="keyValue" type="tns:key_value_data"/>
+					</xsd:sequence>					
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="create_job_request">
+		<wsdl:part name="user" type="xsd:string"/>
+		<wsdl:part name="job_description" type="tns:array_of_key_value_data"/>
+	</wsdl:message>
+
+	<wsdl:message name="create_job_response">
+		<wsdl:part name="create_job_result" type="xsd:integer"/>
+	</wsdl:message>
+
+	<wsdl:message name="get_jobs_request">
+		<wsdl:part name="user" type="xsd:string"/>
+	</wsdl:message>
+
+	<wsdl:message name="get_jobs_response">
+		<wsdl:part name="get_jobs_result" type="tns:array_of_key_value_data"/>
+	</wsdl:message>
+
+
+	<wsdl:portType name="webapis_port_type">
+		<wsdl:operation name="create_job">
+			<wsdl:input message="tns:create_job_request"/>
+			<wsdl:output message="tns:create_job_response"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="get_jobs">
+			<wsdl:input message="tns:get_jobs_request"/>
+			<wsdl:output message="tns:get_jobs_response"/>
+		</wsdl:operation>
+
+	</wsdl:portType>
+
+	<wsdl:binding name="webapis_binding" type="tns:webapis_port_type">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="create_job">
+			<soap:operation soapAction="urn:localhost-create_job#create_job"/>
+			<wsdl:input>
+				<soap:body namespace="urn:localhost-create_job" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="urn:localhost-create_job" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="get_jobs">
+			<soap:operation soapAction="urn:localhost-get_jobs#get_jobs"/>
+			<wsdl:input>
+				<soap:body namespace="urn:localhost-get_jobs" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="urn:localhost-get_jobs" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:binding>
+
+	<wsdl:service name="webapis_wsdl_service">
+		<wsdl:port name="webapis_port" binding="tns:webapis_binding">
+			<soap:address location="http://server_name/apt/test/blog_webservice/soap_server.php"/>			
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

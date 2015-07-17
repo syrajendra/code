@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="{TOOL_NAME}_wsdl"   
+	xmlns:tns="http://{SERVER_NAME}/{PATH_TO_WSDL}/{WSDL_NAME}.wsdl"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	targetNamespace="http://{SERVER_NAME}/{PATH_TO_WSDL}/{WSDL_NAME}.wsdl" 
+	xmlns="http://{SERVER_NAME}/{PATH_TO_WSDL}/{WSDL_NAME}.wsdl">
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://{SERVER_NAME}/{PATH_TO_WSDL}/{WSDL_NAME}.wsdl">
+			<xsd:complexType name="key_value_data">
+				<xsd:sequence>
+					<xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="name" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="data" type="xsd:string"/>
+				</xsd:sequence>			  	
+			</xsd:complexType>
+			
+			<xsd:element name="array_of_key_value_data">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="unbounded" name="keyValue" type="tns:key_value_data"/>
+					</xsd:sequence>					
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+
+	{WSDL_MESSAGES}
+
+	<wsdl:portType name="{TOOL_NAME}_port_type">
+		{WSDL_OPERATIONS}
+	</wsdl:portType>
+
+	<wsdl:binding name="{TOOL_NAME}_binding" type="tns:{TOOL_NAME}_port_type">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		{WSDL_SOAP_ACTIONS}
+	</wsdl:binding>
+
+	<wsdl:service name="{TOOL_NAME}_wsdl_service">
+		<wsdl:port name="{TOOL_NAME}_port" binding="tns:{TOOL_NAME}_binding">
+			<soap:address location="http://{SERVER_NAME}/{PATH_TO_WSDL}/{SERVER_CODE}"/>			
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
